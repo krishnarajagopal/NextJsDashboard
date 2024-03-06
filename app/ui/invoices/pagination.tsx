@@ -4,8 +4,21 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { generatePagination } from '@/app/lib/utils';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
+export default function Pagination({ totalPages }: { totalPages: number })
+{
+
+  const searchParams = useSearchParams();
+  const pathName = usePathname();
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  const createPageURL = (pageNumber: number | string) =>
+  {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', pageNumber.toString());
+    return `${pathName}?${params.toString()}`
+  }
   // NOTE: comment in this code when you get to this point in the course
 
   // const allPages = generatePagination(currentPage, totalPages);
@@ -62,7 +75,8 @@ function PaginationNumber({
   href: string;
   position?: 'first' | 'last' | 'middle' | 'single';
   isActive: boolean;
-}) {
+})
+{
   const className = clsx(
     'flex h-10 w-10 items-center justify-center text-sm border',
     {
@@ -91,7 +105,8 @@ function PaginationArrow({
   href: string;
   direction: 'left' | 'right';
   isDisabled?: boolean;
-}) {
+})
+{
   const className = clsx(
     'flex h-10 w-10 items-center justify-center rounded-md border',
     {
